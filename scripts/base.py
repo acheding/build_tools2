@@ -35,9 +35,8 @@ def is_os_64bit():
   return platform.machine().endswith('64')
 
 def is_os_arm():
-  if -1 == platform.machine().find('arm'):
-    return False
-  return True
+  machine = platform.machine().lower()
+  return 'arm' in machine or 'aarch64' in machine
 
 def get_platform():
   return platform.machine().lower()
@@ -1812,8 +1811,10 @@ def get_autobuild_version(product, platform="", branch="", build=""):
   download_platform = platform
   if ("" == download_platform):
     osType = get_platform()
-    isArm = True if (-1 != osType.find("arm")) else False
     is64 = True if (osType.endswith("64")) else False
+    isArm = False
+    if (-1 != osType.find("arm")) or (-1 != osType.find("aarch64")):
+      isArm = True
     
     if ("windows" == host_platform()):
       download_platform = "win-"

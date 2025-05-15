@@ -117,6 +117,8 @@ def _run_grunt(directory, params=[]):
 
 def build_interface(directory):
   _run_npm(directory)
+  if base.is_os_arm() and base.is_dir(directory + "/node_modules/optipng-bin"):
+    base.copy_file("tools/linux/optipng", directory + "/node_modules/optipng-bin/vendor/optipng")
   _run_grunt(directory, ["--force"] + base.web_apps_addons_param())
   return
 
