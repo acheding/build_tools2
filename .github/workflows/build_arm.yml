@@ -50,3 +50,9 @@ jobs:
       with:
         name: onlyoffice-documentserver_${{ env.VERSION }}-1
         path: deb/onlyoffice-documentserver_${{ env.VERSION }}-1_arm64.deb
+
+    - name: Upload artifact2
+      uses: actions/upload-artifact@v4
+      with:
+        name: web-apps
+        path: web-apps
