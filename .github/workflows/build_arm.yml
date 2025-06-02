@@ -28,7 +28,8 @@ jobs:
                      --build-arg MODULE=${{ env.MODULE }} \
                      --build-arg PLATFORM=${{ env.PLATFORM }} \
                      --tag ${{ env.DOCKER_TAG }} .
-        docker run -v $PWD/web-apps:/web-apps -v $PWD/server:/server -v $PWD/sdkjs:/sdkjs -v $PWD/core:/core ${{ env.DOCKER_TAG }}
+        # docker run -v $PWD/web-apps:/web-apps -v $PWD/server:/server -v $PWD/sdkjs:/sdkjs -v $PWD/core:/core ${{ env.DOCKER_TAG }}
+        docker run -v $PWD/${{ env.BUILD_PATH }}:/build_tools/${{ env.BUILD_PATH }} ${{ env.DOCKER_TAG }}
 
     - name: Package deb
       run: |
