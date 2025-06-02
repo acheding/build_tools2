@@ -28,13 +28,14 @@ jobs:
                      --build-arg MODULE=${{ env.MODULE }} \
                      --build-arg PLATFORM=${{ env.PLATFORM }} \
                      --tag ${{ env.DOCKER_TAG }} .
-        # docker run -v $PWD/web-apps:/web-apps -v $PWD/server:/server -v $PWD/sdkjs:/sdkjs -v $PWD/core:/core ${{ env.DOCKER_TAG }}
         docker run -v $PWD/${{ env.BUILD_PATH }}:/build_tools/${{ env.BUILD_PATH }} ${{ env.DOCKER_TAG }}
+    
+    # ========== 添加 tmate 调试步骤 ==========
+    - name: Start tmate session (Debug)
+      uses: mxschmitt/action-tmate@v3
 
     - name: Package deb
       run: |
-        mkdir -p $GITHUB_WORKSPACE/deb/
-        cp web-apps/build/node_modules $GITHUB_WORKSPACE/deb/
         cd ..
         git clone ${{ env.PACKAGE_REPO }}
         cd document-server-package
@@ -45,6 +46,7 @@ jobs:
         VERSION=$(echo ${{ github.ref_name }} | sed 's/^tags\///; s/^v//')
         echo "VERSION=$VERSION" >> $GITHUB_ENV
         PRODUCT_VERSION=$VERSION BUILD_NUMBER='1' make deb
+        mkdir -p $GITHUB_WORKSPACE/deb/
         cp deb/onlyoffice-documentserver_$VERSION-1_arm64.deb $GITHUB_WORKSPACE/deb/
 
     - name: Upload artifact
@@ -52,9 +54,3 @@ jobs:
       with:
         name: onlyoffice-documentserver_${{ env.VERSION }}-1
         path: deb/onlyoffice-documentserver_${{ env.VERSION }}-1_arm64.deb
-
-    - name: Upload artifact2
-      uses: actions/upload-artifact@v4
-      with:
-        name: node-modules
-        path: deb/node-modules
