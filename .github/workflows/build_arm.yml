@@ -34,7 +34,7 @@ jobs:
     - name: Package deb
       run: |
         mkdir -p $GITHUB_WORKSPACE/deb/
-        cp web-apps/build/node-modules $GITHUB_WORKSPACE/deb/
+        cp web-apps/build/node_modules $GITHUB_WORKSPACE/deb/
         cd ..
         git clone ${{ env.PACKAGE_REPO }}
         cd document-server-package
